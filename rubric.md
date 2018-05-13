@@ -35,7 +35,7 @@ Towards the end of the round, even for N=10, t=0.1s however the car seems to mov
 
 PFA video of the car completing a successful round -
 
-![Update Equations](./videos/video.mov "Video")
+![Update Equations](./video/video.mp4 "Video")
 
 
 ## A polynomial is fitted to waypoints. If the student preprocesses waypoints, the vehicle state, and/or actuators prior to the MPC procedure it is described.
