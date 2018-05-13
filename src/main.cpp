@@ -92,20 +92,28 @@ int main() {
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
 
+
           double steer_value = j[1]["steering_angle"];
-          double throttle_value= j[1]["throttle"];
+          double throttle_value = j[1]["throttle"];
+
+          // Adding some latency to existing values
+          double latency = 0.1;
+          v += throttle_value * latency;
+          psi += v / 2.67 * -steer_value * latency;
+          px += v * cos(psi) * latency;
+          py += v * sin(psi) * latency;
 
           // making px and py (ie the cars vertices) the origin simplifies future calculations
           for(int i=0; i<ptsx.size(); i++){
             double dx = ptsx[i] - px;
             double dy = ptsy[i] - py;
 
-            ptsx[i] = dx * cos(0-psi) - dy * sin(0-psi);
-            ptsy[i] = dx * sin(0-psi) + dy * cos(0-psi);
+            ptsx[i] = dx * cos(-psi) - dy * sin(-psi);
+            ptsy[i] = dx * sin(-psi) + dy * cos(-psi);
           }
 
-          Eigen::Map<Eigen::VectorXd> ptsx_transform(&ptrx[0], 6);
-          Eigen::Map<Eigen::VectorXd> ptsy_transform(&ptry[0], 6);
+          Eigen::Map<Eigen::VectorXd> ptsx_transform(&ptsx[0], 6);
+          Eigen::Map<Eigen::VectorXd> ptsy_transform(&ptsy[0], 6);
 
           auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
           double cte =  polyeval(coeffs, 0);
@@ -146,7 +154,7 @@ int main() {
           vector<double> next_x_vals;
           vector<double> next_y_vals;
 
-          double inc = 2.5;
+          double inc = 0.5;
           int num_pts = 25;
           for (double i = 0; i < num_pts; i++) {
               next_x_vals.push_back(inc * i);

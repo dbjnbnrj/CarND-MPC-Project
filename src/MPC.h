@@ -9,10 +9,7 @@ using namespace std;
 class MPC {
  public:
   MPC();
-
   virtual ~MPC();
-
-  constexpr double pi();
 
   double deg2rad(double x);
   double rad2deg(double x);
